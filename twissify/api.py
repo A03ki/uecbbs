@@ -26,7 +26,7 @@ def filter_retweets(tweets):
 
 
 def extract_public_tweets(tweets):
-    "鍵垢以外ののツイートを取り出す"
+    "鍵垢以外のツイートを取り出す"
     return [tweet for tweet in tweets if not tweet.user.protected]
 
 
