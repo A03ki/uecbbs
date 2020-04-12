@@ -1,6 +1,6 @@
 import io
-import PIL
 import requests
+from PIL import Image
 
 
 def load_image_url(image_url):
@@ -25,5 +25,5 @@ def load_image_url(image_url):
     image = None
     response = requests.get(image_url)
     if response.status_code == 200:
-        image = PIL.Image.open(io.BytesIO(response.content))
+        image = Image.open(io.BytesIO(response.content))
     return image, response.status_code
