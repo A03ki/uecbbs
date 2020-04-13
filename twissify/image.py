@@ -25,5 +25,21 @@ def load_image_url(image_url):
     image = None
     response = requests.get(image_url)
     if response.status_code == 200:
-        image = Image.open(io.BytesIO(response.content))
+        image = open_image_binary(response.content)
     return image, response.status_code
+
+
+def open_image_binary(image_binary):
+    """画像のバイナリデータをImageオブジェクトとして得る
+
+    Parameters
+    ----------
+    image_binary : bytes
+        画像のバイナリデータ
+
+    Returns
+    -------
+    a inheritance of PIL.ImageFile.ImageFile
+        Imageオブジェクト
+    """
+    return Image.open(io.BytesIO(image_binary))
