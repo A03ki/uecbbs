@@ -14,7 +14,7 @@ class TestAPI(unittest.TestCase):
         response = [{"user": None, "media": None}, {"user": None}]
         expectations = [True, False]
         for expectation, status in zip(expectations, response):
-            tweet = Mock(entities=f"{status}")
+            tweet = Mock(entities=status)
             actual = has_media(tweet)
             self.assertEqual(expectation, actual)
 
