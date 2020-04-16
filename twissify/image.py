@@ -19,8 +19,10 @@ def load_image_url(image_url):
     tuple of a inheritance of PIL.ImageFile.ImageFile and int
         Imageオブジェクト(またはNone)とHTTPステータスコードのタプル
 
-    Note: urlが存在しないときはConnectionErrorが呼ばれる
-        また、画像url以外のurlではUnidentifiedImageErrorが呼ばれる
+    Notes
+    -----
+    urlが存在しないときはConnectionErrorが呼ばれる
+    また、画像url以外のurlではUnidentifiedImageErrorが呼ばれる
     """
     image = None
     response = requests.get(image_url)
