@@ -7,7 +7,7 @@ def load_image_url(image_url):
     """画像urlからImageオブジェクトとHTTPステータスコードを得る
 
     画像urlに正常にアクセスできたときはImageオブジェクトとHTTPステータスコードを得る
-    正常にアクセスできなかったときはImageオブジェクトの代わりにNoneが返る
+    正常にアクセスできなかったときはImageオブジェクトの代わりに ``None`` が返る
 
     Parameters
     ----------
@@ -17,12 +17,12 @@ def load_image_url(image_url):
     Returns
     -------
     tuple of a inheritance of PIL.ImageFile.ImageFile and int
-        Imageオブジェクト(またはNone)とHTTPステータスコードのタプル
+        Imageオブジェクト(または ``None`` )とHTTPステータスコードのタプル
 
     Notes
     -----
-    urlが存在しないときはConnectionErrorが呼ばれる
-    また、画像url以外のurlではUnidentifiedImageErrorが呼ばれる
+    urlが存在しないときは ``ConnectionError`` が呼ばれる
+    また、画像url以外のurlでは ``UnidentifiedImageError`` が呼ばれる
     """
     image = None
     response = requests.get(image_url)
