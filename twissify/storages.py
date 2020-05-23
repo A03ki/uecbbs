@@ -5,7 +5,7 @@ from twissify.tables import TimelineIndex
 
 
 class TimelineIndexStorage:
-    "各タイムラインの`since_id`と`max_id`の保存、更新を行うクラス"
+    "各タイムラインの ``since_id`` と ``max_id`` の保存、更新を行うクラス"
     def __init__(self, url):
         self.engine = create_engine(url)
         TimelineIndex.metadata.create_all(self.engine)
@@ -16,7 +16,7 @@ class TimelineIndexStorage:
         Raises
         ------
         ValueError
-            既に同一の`name`が存在するとき
+            既に同一の ``name`` が存在するとき
         """
         session = self.session()
         timelineindex = TimelineIndex.find_by_name(name, session)
@@ -33,7 +33,7 @@ class TimelineIndexStorage:
         Raises
         ------
         ValueError
-            対応する`name`が存在しないとき
+            対応する ``name`` が存在しないとき
         """
         session = self.session()
         timelineindex = TimelineIndex.find_by_name(name, session)
@@ -47,7 +47,7 @@ class TimelineIndexStorage:
         session.commit()
 
     def create_ids(self, name, tweets):
-        """タイムラインから`name`に対応するレコードを新しく作成する
+        """タイムラインから ``name`` に対応するレコードを新しく作成する
 
         Parameters
         ----------
@@ -59,7 +59,7 @@ class TimelineIndexStorage:
         self._create(name, since_id=tweets.since_id, max_id=tweets.max_id)
 
     def update_ids(self, name, tweets):
-        """タイムラインから`name`に対応するレコードを更新する
+        """タイムラインから ``name`` に対応するレコードを更新する
 
         Parameters
         ----------
@@ -71,7 +71,7 @@ class TimelineIndexStorage:
         self._update(name, tweets.since_id, tweets.max_id)
 
     def get_ids(self, name):
-        """`name`に対応するレコードを返す
+        """``name`` に対応するレコードを返す
 
         Parameters
         ----------
@@ -81,7 +81,7 @@ class TimelineIndexStorage:
         Returns
         -------
         TimelineIndex
-            `since_id`と`max_id`をフィールドとして持つレコード
+            ``since_id`` と ``max_id`` をフィールドとして持つレコード
         """
         session = self.session()
         return TimelineIndex.find_by_name(name, session)

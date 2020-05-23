@@ -31,8 +31,8 @@ class Timeline:
 
         Notes
         -----
-        `since_id`で指定した値を超えるIDを持つツイートを取得する。
-        `max_id`で指定した値以下のIDを持つツイートを取得する。
+        ``since_id`` で指定した値を超えるIDを持つツイートを取得する。
+        ``max_id`` で指定した値以下のIDを持つツイートを取得する。
         両方指定しなければ、最新のタイムラインを取得する。
         """
         tweets = self._api.home_timeline(count=count, since_id=since_id,
