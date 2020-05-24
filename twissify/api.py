@@ -4,7 +4,8 @@ def has_media(tweet):
 
 
 def is_photo(tweet):
-    """
+    """画像ツイートであるかを確認する
+
     Notes
     -----
     Twitterの仕様上、動画やGIFは複数投稿できないため、最初のmediaのみを確認している
