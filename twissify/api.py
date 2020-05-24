@@ -16,6 +16,7 @@ def is_photo(tweet):
 
 
 def is_retweet(tweet):
+    "リツイートであるかを確認する"
     return hasattr(tweet, "retweeted_status")
 
 
