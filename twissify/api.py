@@ -1,4 +1,5 @@
 def has_media(tweet):
+    "メディア情報を含んでいるかを確認する"
     return "media" in tweet.entities
 
 
