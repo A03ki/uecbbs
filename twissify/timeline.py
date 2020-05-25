@@ -48,7 +48,7 @@ class Timeline:
         return tweets
 
     @property
-    def get_home_timeline_ids(self):
+    def home_timeline_ids(self):
         """前回の ``since_id`` と ``max_id`` を保持するオブジェクトを取得する
 
         Returns
