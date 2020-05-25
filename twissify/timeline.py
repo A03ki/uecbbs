@@ -1,5 +1,11 @@
 class Timeline:
-    """タイムラインの取得と ``since_id`` と ``max_id`` を保存、取得するクラス"""
+    """タイムラインの取得と ``since_id`` と ``max_id`` を保存、取得するクラス
+
+    Attributes
+    ーーーーーー
+    home_timeline_ids : TimelineIndex or None
+        ホームタイムラインの ``since_id`` と ``max_id`` を保持するオブジェクト
+    """
     def __init__(self, api, storage):
         """
         Parameters
