@@ -46,12 +46,12 @@ class TestTimeline(unittest.TestCase):
         storage.update_ids.assert_called_once_with("home_timeline",
                                                    expectation_tweets)
 
-    def test_get_home_timeline_ids(self):
+    def test_home_timeline_ids(self):
         expectation = "Success!"
         api = None
         storage = Mock(**{"get_ids.return_value": expectation})
         timeline = Timeline(api, storage)
-        actual = timeline.get_home_timeline_ids
+        actual = timeline.home_timeline_ids
         self.assertEqual(expectation, actual)
 
         storage.get_ids.assert_called_once_with("home_timeline")
