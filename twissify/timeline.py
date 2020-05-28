@@ -43,15 +43,24 @@ class Timeline:
         """
         tweets = self._api.home_timeline(count=count, since_id=since_id,
                                          max_id=max_id)
-        timeline_name = self.home_timeline.__name__
+        self.save_timeline_ids(self.home_timeline.__name__, tweets)
+        return tweets
 
+    def save_timeline_ids(self, timeline_name, tweets):
+        """タイムラインの ``since_id`` と ``max_id`` を保存する
+
+        Parameters
+        ----------
+        timeline_name : str
+            タイムライン名
+        tweets : tweepy.models.ResultSet
+            タイムライン上のツイート
+        """
         if tweets != []:
             try:
                 self._storage.create_ids(timeline_name, tweets)
             except ValueError:
                 self._storage.update_ids(timeline_name, tweets)
-
-        return tweets
 
     @property
     def home_timeline_ids(self):
