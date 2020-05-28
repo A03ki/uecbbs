@@ -5,46 +5,50 @@ from twissify.timeline import Timeline
 
 
 class TestTimeline(unittest.TestCase):
-    def test_home_timeline_api(self):
-        expectation_tweets = []
+    def test_home_timeline(self):
+        expectation_tweets = [1, 2, 3]
         api = Mock(**{"home_timeline.return_value": expectation_tweets})
         storage = None
         timeline = Timeline(api, storage)
-        expectation_kwargs = {"count": 100,
-                              "since_id": 10,
-                              "max_id": 1}
-        actual = timeline.home_timeline(**expectation_kwargs)
-        self.assertEqual(expectation_tweets, actual)
+        timeline.save_timeline_ids = Mock()
+        expectation = {"count": 100, "since_id": 20, "max_id": 5}
+        actual = timeline.home_timeline(**expectation)
+        self.assertEqual(actual, expectation_tweets)
 
-        api.home_timeline.assert_called_once_with(**expectation_kwargs)
+        api.home_timeline.assert_called_once_with(**expectation)
+        timeline.save_timeline_ids.assert_called_once_with("home_timeline",
+                                                           expectation_tweets)
 
-    def test_home_timeline_storage_create_ids(self):
-        expectation_tweets = [1]
-        api = Mock(**{"home_timeline.return_value": expectation_tweets})
+    def test_save_timeline_ids_empty_tweets(self):
+        tweets = []
+        api = None
         storage = Mock()
         timeline = Timeline(api, storage)
-        expectation_kwargs = {"count": 200,
-                              "since_id": 20,
-                              "max_id": 2}
-        actual = timeline.home_timeline(**expectation_kwargs)
-        self.assertEqual(expectation_tweets, actual)
+        timeline_name = "home_timeline"
+        timeline.save_timeline_ids(timeline_name, tweets)
 
-        storage.create_ids.assert_called_once_with("home_timeline",
-                                                   expectation_tweets)
+        storage.create_ids.assert_not_called()
+        storage.update_ids.assert_not_called()
 
-    def test_home_timeline_storage_update_ids(self):
-        expectation_tweets = [2, 3]
-        api = Mock(**{"home_timeline.return_value": expectation_tweets})
+    def test_save_timeline_ids_create_ids(self):
+        tweets = [1]
+        api = None
+        storage = Mock()
+        timeline = Timeline(api, storage)
+        timeline_name = "home_timeline"
+        timeline.save_timeline_ids(timeline_name, tweets)
+
+        storage.create_ids.assert_called_once_with(timeline_name, tweets)
+
+    def test_save_timeline_ids_update_ids(self):
+        tweets = [2, 3]
+        api = None
         storage = Mock(**{"create_ids.side_effect": ValueError})
         timeline = Timeline(api, storage)
-        expectation_kwargs = {"count": 300,
-                              "since_id": 30,
-                              "max_id": 3}
-        actual = timeline.home_timeline(**expectation_kwargs)
-        self.assertEqual(expectation_tweets, actual)
+        timeline_name = "home_timeline"
+        timeline.save_timeline_ids(timeline_name, tweets)
 
-        storage.update_ids.assert_called_once_with("home_timeline",
-                                                   expectation_tweets)
+        storage.update_ids.assert_called_once_with(timeline_name, tweets)
 
     def test_home_timeline_ids(self):
         expectation = "Success!"
