@@ -11,11 +11,13 @@ class TestTimeline(unittest.TestCase):
         storage = None
         timeline = Timeline(api, storage)
         timeline.save_timeline_ids = Mock()
-        expectation = {"count": 100, "since_id": 20, "max_id": 5}
-        actual = timeline.home_timeline(**expectation)
+        expectation_kwargs = {"count": 100,
+                              "since_id": 10,
+                              "max_id": 1}
+        actual = timeline.home_timeline(**expectation_kwargs)
         self.assertEqual(actual, expectation_tweets)
 
-        api.home_timeline.assert_called_once_with(**expectation)
+        api.home_timeline.assert_called_once_with(**expectation_kwargs)
         timeline.save_timeline_ids.assert_called_once_with("home_timeline",
                                                            expectation_tweets)
 
