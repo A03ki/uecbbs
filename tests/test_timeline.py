@@ -1,25 +1,25 @@
 import unittest
 from unittest.mock import Mock
 
+from test_tables import test_ids
 from twissify.timeline import Timeline
 
 
 class TestTimeline(unittest.TestCase):
     def test_home_timeline(self):
         expectation_tweets = [1, 2, 3]
+        timeline_name = "home_timeline"
+        expectation = {timeline_name: expectation_tweets}
         api = Mock(**{"home_timeline.return_value": expectation_tweets})
         storage = None
         timeline = Timeline(api, storage)
-        timeline.save_timeline_ids = Mock()
         expectation_kwargs = {"count": 100,
                               "since_id": 10,
                               "max_id": 1}
-        actual = timeline.home_timeline(**expectation_kwargs)
-        self.assertEqual(actual, expectation_tweets)
-
-        api.home_timeline.assert_called_once_with(**expectation_kwargs)
-        timeline.save_timeline_ids.assert_called_once_with("home_timeline",
-                                                           expectation_tweets)
+        actual_tweets = timeline.home_timeline(**expectation_kwargs)
+        actual = timeline._tweets
+        self.assertEqual(actual_tweets, expectation_tweets)
+        self.assertEqual(actual, expectation)
 
     def test_save_timeline_ids_empty_tweets(self):
         tweets = []
@@ -61,6 +61,20 @@ class TestTimeline(unittest.TestCase):
         self.assertEqual(expectation, actual)
 
         storage.get_ids.assert_called_once_with("home_timeline")
+
+    def test_with_save_timeline_ids_called_timelines(self):
+        names = ["home_timeline"]
+        return_values = [name + ".return_value" for name in names]
+        timelines_tweets = test_ids(return_values, 3)
+        api = Mock(**dict(zip(return_values, timelines_tweets)))
+        storage = None
+        with Timeline(api, storage) as tl:
+            tl.save_timeline_ids = Mock()
+            tl.home_timeline(100)
+
+        for name, tweets in zip(names, timelines_tweets):
+            with self.subTest(names=names, tweets=tweets):
+                tl.save_timeline_ids.assert_any_call(name, tweets)
 
 
 if __name__ == "__main__":
