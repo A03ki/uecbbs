@@ -17,6 +17,7 @@ class Timeline:
         """
         self._api = api
         self._storage = storage
+        self._tweets = {}
 
     def home_timeline(self, count, since_id=None, max_id=None):
         """ホームタイムライン上のツイートを取得する
@@ -43,7 +44,7 @@ class Timeline:
         """
         tweets = self._api.home_timeline(count=count, since_id=since_id,
                                          max_id=max_id)
-        self.save_timeline_ids(self.home_timeline.__name__, tweets)
+        self._tweets[self.home_timeline.__name__] = tweets
         return tweets
 
     def save_timeline_ids(self, timeline_name, tweets):
@@ -72,3 +73,11 @@ class Timeline:
             ``since_id`` と ``max_id`` を保持するオブジェクト。存在しなければ ``None``
         """
         return self._storage.get_ids("home_timeline")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        "各タイムラインの ``since_id`` と ``max_id`` を保存する"
+        for timeline_name, tweets in self._tweets.items():
+            self.save_timeline_ids(timeline_name, tweets)
