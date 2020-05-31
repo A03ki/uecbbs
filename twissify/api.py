@@ -163,3 +163,19 @@ def extract_photos_urls(tweets):
         画像urlを格納したリストを格納したリスト
     """
     return [extract_photo_urls(tweet) for tweet in tweets if is_photo(tweet)]
+
+
+def extract_retweets_origin(tweets):
+    """リツイート元のツイートを取り出す
+
+    Parameters
+    ----------
+    tweets : tweepy.models.ResultSet or array-like of tweepy.models.Status
+        ツイートオブジェクトを格納したリスト風のオブジェクト
+
+    Returns
+    -------
+    list of tweepy.models.Status
+        リツイート元のツイートオブジェクトを格納したリスト
+    """
+    return [tweet.retweeted_status for tweet in tweets if is_retweet(tweet)]
