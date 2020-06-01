@@ -6,7 +6,7 @@ from twissify.api import (has_media, is_photo, is_retweet,
                           filter_myretweeted_tweets, filter_retweets,
                           filter_protected_tweets, extract_photo_tweets,
                           extract_tweet_ids, extract_photos_urls,
-                          extract_photo_urls)
+                          extract_photo_urls, extract_retweets_origin)
 
 
 class TestAPI(unittest.TestCase):
@@ -93,6 +93,16 @@ class TestAPI(unittest.TestCase):
         tweet = Mock(extended_entities={"media": [{"media_url": i}
                                                   for i in expectations]})
         actuals = extract_photo_urls(tweet)
+        np.testing.assert_array_equal(expectations, actuals)
+
+    @patch("twissify.api.is_retweet",
+           side_effect=[True, False, False, True, True])
+    def test_extract_retweets_origin(self, is_retweet):
+        bools = [True, False, False, True, True]
+        statuses = list(range(0, len(bools)))
+        tweets = [Mock(retweeted_status=status) for status in statuses]
+        actuals = extract_retweets_origin(tweets)
+        expectations = [tweet for tweet, bool in zip(statuses, bools) if bool]
         np.testing.assert_array_equal(expectations, actuals)
 
 
