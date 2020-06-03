@@ -10,6 +10,5 @@ setup(
     url="",
     license="MIT License",
     packages=["twissify",
-              "tests"],
-    test_suite="tests"
+              "tests"]
 )
