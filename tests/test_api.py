@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 import unittest
 from unittest.mock import Mock, patch
@@ -46,8 +47,8 @@ class TestAPI(unittest.TestCase):
 
     @patch("twissify.api.is_retweet",
            side_effect=[True, False, True, False, False])
-    def test_filter_retweets(self, _):
-        bools = [True, False, True, False, False]
+    def test_filter_retweets(self, is_retweet):
+        bools = list(copy.copy(is_retweet.side_effect))
         tweets = [Mock() for _ in bools]
         actuals = filter_retweets(tweets)
         expectations = [tweet for tweet, bool in zip(tweets, bools)
@@ -64,8 +65,8 @@ class TestAPI(unittest.TestCase):
 
     @patch("twissify.api.is_photo",
            side_effect=[True, False, True, False, False])
-    def test_extract_photo_tweets(self, _):
-        bools = [True, False, True, False, False]
+    def test_extract_photo_tweets(self, is_photo):
+        bools = list(copy.copy(is_photo.side_effect))
         tweets = [Mock() for _ in bools]
         actuals = extract_photo_tweets(tweets)
         expectations = [tweet for tweet, bool in zip(tweets, bools) if bool]
@@ -98,7 +99,7 @@ class TestAPI(unittest.TestCase):
     @patch("twissify.api.is_retweet",
            side_effect=[True, False, False, True, True])
     def test_extract_retweets_origin(self, is_retweet):
-        bools = [True, False, False, True, True]
+        bools = list(copy.copy(is_retweet.side_effect))
         statuses = list(range(0, len(bools)))
         tweets = [Mock(retweeted_status=status) for status in statuses]
         actuals = extract_retweets_origin(tweets)
