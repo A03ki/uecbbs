@@ -11,10 +11,10 @@ class TestImage(unittest.TestCase):
     def test_load_image_url(self, requests_get, open_image_binary):
         url = "url"
         expectations = [(None, 199),
-                        ("ImageFile", 200),
+                        (open_image_binary.return_value, 200),
                         (None, 201)]
         expectation_requests_get = url
-        expectation_oib = "bytes"
+        expectation_oib = requests_get.return_value.content
 
         for expectation in expectations:
             requests_get.return_value.status_code = expectation[1]
@@ -29,9 +29,9 @@ class TestImage(unittest.TestCase):
     @patch("io.BytesIO", return_value="bytes")
     def test_open_image_binary(self, io_BytesIO, Image_open):
         string = "test"
-        expectation = "Success!"
+        expectation = Image_open.return_value
         expectation_io_BytesIO = string
-        expectation_Image_open = "bytes"
+        expectation_Image_open = io_BytesIO.return_value
         actual = open_image_binary(string)
         io_BytesIO.assert_called_once_with(expectation_io_BytesIO)
         Image_open.assert_called_once_with(expectation_Image_open)
