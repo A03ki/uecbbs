@@ -19,6 +19,15 @@ class APIWrapper:
         self._storage = storage
         self._tweets = {}
 
+        apiw_method_names = filter_special_methods(APIWrapper)
+        api_attribute_names = filter_special_methods(api)
+
+        for attribute_name in (api_attribute_names - apiw_method_names):
+            try:
+                setattr(self, attribute_name, getattr(api, attribute_name))
+            except AttributeError:
+                pass
+
     def home_timeline(self, count, since_id=None, max_id=None):
         """ホームタイムライン上のツイートを取得する
 
@@ -81,3 +90,19 @@ class APIWrapper:
         "各タイムラインの ``since_id`` と ``max_id`` を保存する"
         for timeline_name, tweets in self._tweets.items():
             self.save_timeline_ids(timeline_name, tweets)
+
+
+def filter_special_methods(obj):
+    """特殊メソッド以外の属性名の集合を取得する
+
+    Parameters
+    ----------
+    obj : object
+
+    Returns
+    -------
+    set
+        特殊メソッドを取り除いた属性の集合
+    """
+    return {method for method in dir(obj)
+            if not (method.startswith("__") and method.endswith("__"))}
