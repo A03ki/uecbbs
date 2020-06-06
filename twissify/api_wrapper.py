@@ -1,5 +1,5 @@
-class Timeline:
-    """タイムラインの取得と ``since_id`` と ``max_id`` を保存、取得するクラス
+class APIWrapper:
+    """TwitterAPIのラッパーのラッパー
 
     Attributes
     ーーーーーー
