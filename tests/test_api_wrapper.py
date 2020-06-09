@@ -7,6 +7,31 @@ from test_tables import test_ids
 
 
 class TestAPIWrapper(unittest.TestCase):
+    def test__init__(self):
+        class TestAPI:
+            def __init__(self, a):
+                self._test_attribute = a
+
+            def test_method(self, b):
+                return b
+
+            def home_timeline(self):
+                return 1
+
+        names = {"_test_attribute", "test_method", "__weakref__", "__new__"}
+        api = TestAPI(2)
+        storage = None
+        apiw = APIWrapper(api, storage)
+        for attribute_name in dir(api):
+            with self.subTest(attribute_name=attribute_name):
+                api_attribute = str(getattr(api, attribute_name))
+                apiw_attribute = str(getattr(apiw, attribute_name))
+
+                if attribute_name in names:
+                    self.assertEqual(api_attribute, apiw_attribute)
+                else:
+                    self.assertNotEqual(api_attribute, apiw_attribute)
+
     def test_home_timeline(self):
         expectation_tweets = [1, 2, 3]
         timeline_name = "home_timeline"
