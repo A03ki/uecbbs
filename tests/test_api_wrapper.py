@@ -81,12 +81,38 @@ class TestAPIWrapper(unittest.TestCase):
     def test_home_timeline_ids(self):
         expectation = "Success!"
         api = None
-        storage = Mock(**{"get_ids.return_value": expectation})
+        storage = None
         apiw = APIWrapper(api, storage)
+        apiw._get_ids = Mock(return_value=expectation)
         actual = apiw.home_timeline_ids
         self.assertEqual(expectation, actual)
 
-        storage.get_ids.assert_called_once_with("home_timeline")
+        apiw._get_ids.assert_called_once_with("home_timeline")
+
+    def test__get_ids_not_exist_record(self):
+        expectation_ids = None
+        expectation_name = "test_timeline"
+        api = None
+        storage = Mock(**{"get_ids.return_value": expectation_ids})
+        apiw = APIWrapper(api, storage)
+        actual = apiw._get_ids(expectation_name)
+        self.assertEqual(expectation_ids, actual.since_id)
+        self.assertEqual(expectation_ids, actual.max_id)
+
+        storage.get_ids.assert_called_once_with(expectation_name)
+
+    def test__get_ids_exist_record(self):
+        expectation_ids = {"since_id": 10, "max_id": 20}
+        ids = Mock(**expectation_ids)
+        expectation_name = "test_timeline"
+        api = None
+        storage = Mock(**{"get_ids.return_value": ids})
+        apiw = APIWrapper(api, storage)
+        actual = apiw._get_ids(expectation_name)
+        self.assertEqual(expectation_ids["since_id"], actual.since_id)
+        self.assertEqual(expectation_ids["max_id"], actual.max_id)
+
+        storage.get_ids.assert_called_once_with(expectation_name)
 
     def test_with_save_timeline_ids_called_timelines(self):
         names = ["home_timeline"]
