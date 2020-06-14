@@ -1,3 +1,6 @@
+from collections import namedtuple
+
+
 class APIWrapper:
     """TwitterAPIのラッパーのラッパー
 
@@ -81,7 +84,15 @@ class APIWrapper:
         TimelineIndex or None
             ``since_id`` と ``max_id`` を保持するオブジェクト。存在しなければ ``None``
         """
-        return self._storage.get_ids("home_timeline")
+        return self._get_ids("home_timeline")
+
+    def _get_ids(self, name):
+        TimelineIndex = namedtuple("TimelineIndex", ["since_id", "max_id"])
+        ids = self._storage.get_ids(name)
+        if ids is None:
+            return TimelineIndex(since_id=None, max_id=None)
+        else:
+            return TimelineIndex(since_id=ids.since_id, max_id=ids.max_id)
 
     def __enter__(self):
         return self
