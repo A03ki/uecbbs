@@ -81,8 +81,8 @@ class APIWrapper:
 
         Returns
         -------
-        TimelineIndex or None
-            ``since_id`` と ``max_id`` を保持するオブジェクト。存在しなければ ``None``
+        TimelineIndex
+            ``since_id`` と ``max_id`` を保持するオブジェクト
         """
         return self._get_ids("home_timeline")
 
