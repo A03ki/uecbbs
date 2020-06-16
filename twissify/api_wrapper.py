@@ -6,7 +6,7 @@ class APIWrapper:
 
     Attributes
     ーーーーーー
-    home_timeline_ids : TimelineIndex or None
+    home_timeline_ids : TimelineIndex
         ホームタイムラインの ``since_id`` と ``max_id`` を保持するオブジェクト
     """
     def __init__(self, api, storage):
