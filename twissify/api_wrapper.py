@@ -87,6 +87,18 @@ class APIWrapper:
         return self._get_ids("home_timeline")
 
     def _get_ids(self, name):
+        """名前に対応する ``since_id`` と ``max_id`` を保持するオブジェクトを取得する
+
+        Parameters
+        ----------
+        name : str
+            タイムライン名
+
+        Returns
+        -------
+        TimelineIndex
+            ``since_id`` と ``max_id`` を保持するオブジェクト
+        """
         TimelineIndex = namedtuple("TimelineIndex", ["since_id", "max_id"])
         ids = self._storage.get_ids(name)
         if ids is None:
