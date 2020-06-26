@@ -5,7 +5,7 @@ class APIWrapper:
     """TwitterAPIのラッパーのラッパー
 
     Attributes
-    ーーーーーー
+    ----------
     home_timeline_ids : TimelineIndex
         ホームタイムラインの ``since_id`` と ``max_id`` を保持するオブジェクト
     """
